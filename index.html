@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bank Transaction & Currency Exchange</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: whitesmoke;
+            padding: 0 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: whitesmoke;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: blue;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1em;
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            color: blue;
+            font-size: 1.1em;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-bottom: 15px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #218838;
+            transform: translateY(-3px);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #007bff;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+
+        .message {
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        #transactionHistory {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: White;
+            border-radius: 5px;
+            border: 1px solid grey;
+        }
+
+        #transactionHistory ul {
+            list-style: none;
+            color: black;
+        }
+
+        #clearHistoryBtn {
+            background-color: #d9534f;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #clearHistoryBtn:hover {
+            background-color: #c9302c;
+        }
+
+        /* Sections for scrollable content */
+        section {
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #currencySection {
+            margin-top: 500px;
+        }
+
+        #transactionSection,
+        #currencySection {
+            display: block;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .scrollable-container {
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+            input,
+            select {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Welcome to Online Banking & Currency Exchange</h1>
+    <h2>Your One-Stop Solution for Banking and Currency Exchange Services</h2>
+    <p>Manage your bank transactions and exchange currencies with ease. Stay in control of your finances right from this
+        platform!</p>
+    <p>Created By Hemang Dutt Mishra<a href="https://www.linkedin.com/in/hemang2208/" target="_blank">Linkedin</a></p>
+
+
+    <div class="container">
+
+        <!-- Bank Transaction Section -->
+        <section id="transactionSection">
+            <h2>Bank Transaction</h2>
+            <form id="transactionForm">
+                <input type="text" id="accountHolder" placeholder="Account Holder Name" required>
+                <input type="number" id="amount" placeholder="Amount" required>
+                <select id="transactionType" required>
+                    <option value="">Select Transaction Type</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="withdraw">Withdraw</option>
+                </select>
+                <button type="submit">Submit Transaction</button>
+            </form>
+            <div id="message" class="message"></div>
+            <p id="balance">Current Balance: $0.00</p>
+            <div id="transactionHistory"></div>
+            <button id="clearHistoryBtn">Clear Transaction History</button>
+        </section>
+
+        <!-- Currency Exchange Section -->
+        <section id="currencySection">
+            <h2>Currency Exchange</h2>
+            <form id="currencyForm">
+                <input type="number" id="currencyAmount" placeholder="Enter Amount" required>
+                <select id="fromCurrency" required>
+                    <option value="">Select From Currency</option>
+                    <option value="inr">Rupee (R)</option>
+                    <option value="usd">USD ($)</option>
+                    <option value="euro">Euro (€)</option>
+                    <option value="gbp">Pound (£)</option>
+                    <option value="jpy">Jap Yen (Y)</option>
+                </select>
+                <select id="toCurrency" required>
+                    <option value="">Select To Currency</option>
+                    <option value="inr">Rupee (R)</option>
+                    <option value="usd">USD ($)</option>
+                    <option value="euro">Euro (€)</option>
+                    <option value="gbp">Pound (£)</option>
+                    <option value="jpy">Jap Yen (Y)</option>
+                </select>
+                <button type="submit">Exchange Currency</button>
+            </form>
+            <div id="currencyMessage" class="message"></div>
+        </section>
+    </div>
+
+    <script>
+        // Initialize balance and transaction history
+        let balance = parseFloat(localStorage.getItem('bank_balance')) || 0;
+        let transactionHistory = JSON.parse(localStorage.getItem('bank_transactionHistory')) || [];
+
+        // Display balance and transaction history
+        document.getElementById('balance').innerText = `Current Balance: $${balance.toFixed(2)}`;
+        updateTransactionHistory();
+
+        // Transaction form handler
+        document.getElementById('transactionForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const accountHolder = document.getElementById('accountHolder').value.trim();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const transactionType = document.getElementById('transactionType').value;
+            const messageElement = document.getElementById('message');
+
+            if (!accountHolder || isNaN(amount) || amount <= 0 || !transactionType) {
+                messageElement.innerText = 'Please fill out all fields correctly.';
+                return;
+            }
+
+            let message = '';
+            if (transactionType === 'deposit') {
+                balance += amount;
+                message = `${accountHolder}, you have deposited $${amount.toFixed(2)}.`;
+            } else if (transactionType === 'withdraw') {
+                if (amount > balance) {
+                    message = `${accountHolder}, insufficient funds for withdrawal of $${amount.toFixed(2)}.`;
+                } else {
+                    balance -= amount;
+                    message = `${accountHolder}, you have withdrawn $${amount.toFixed(2)}.`;
+                }
+            }
+
+            document.getElementById('balance').innerText = `Current Balance: $${balance.toFixed(2)}`;
+            localStorage.setItem('bank_balance', balance.toFixed(2));
+            messageElement.innerText = message;
+
+            const transaction = {
+                type: transactionType,
+                amount: amount,
+                date: new Date().toLocaleString()
+            };
+
+            transactionHistory.push(transaction);
+            localStorage.setItem('bank_transactionHistory', JSON.stringify(transactionHistory));
+
+            updateTransactionHistory();
+        });
+
+        // Currency exchange form handler
+        document.getElementById('currencyForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const amountInCurrency = parseFloat(document.getElementById('currencyAmount').value);
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const messageElement = document.getElementById('currencyMessage');
+
+            if (isNaN(amountInCurrency) || amountInCurrency <= 0 || !fromCurrency || !toCurrency || fromCurrency === toCurrency) {
+                messageElement.innerText = 'Please select valid currencies and enter a positive amount.';
+                return;
+            }
+
+            const exchangeRates = {
+                'usd_euro': 0.84975000,    // USD to Euro
+                'usd_gbp': 0.74985000,    // USD to GBP
+                'euro_usd': 1.17647059,    // Euro to USD
+                'euro_gbp': 0.88235294,    // Euro to GBP
+                'gbp_usd': 1.33333333,    // GBP to USD
+                'gbp_euro': 1.14285714,    // GBP to Euro
+                'usd_inr': 82.50750000,    // USD to INR
+                'inr_usd': 0.01212000, // INR to USD
+                'usd_jpy': 135.50000000,    // USD to JPY
+                'jpy_usd': 0.00739000, // JPY to USD
+                'euro_inr': 87.75150000,    // Euro to INR
+                'inr_euro': 0.01141000, // INR to Euro
+                'euro_jpy': 159.50000000,    // Euro to JPY
+                'jpy_euro': 0.00626000, // JPY to Euro
+                'gbp_inr': 101.25000000,    // GBP to INR
+                'inr_gbp': 0.00987000, // INR to GBP
+                'gbp_jpy': 180.50000000,    // GBP to JPY
+                'jpy_gbp': 0.00554000, // JPY to GBP
+                'inr_jpy': 1.64000000,      // INR to JPY
+                'jpy_inr': 0.60975610    // JPY to INR
+            };
+
+            const rateKey = fromCurrency + '_' + toCurrency;
+            const exchangeRate = exchangeRates[rateKey];
+
+            if (exchangeRate) {
+                const exchangedAmount = amountInCurrency * exchangeRate;
+                messageElement.innerText = `${amountInCurrency} ${fromCurrency.toUpperCase()} = ${exchangedAmount.toFixed(2)} ${toCurrency.toUpperCase()}`;
+            } else {
+                messageElement.innerText = 'Exchange rate not available for selected currencies.';
+            }
+        });
+
+        // Function to update transaction history display
+        function updateTransactionHistory() {
+            const transactionHistoryDiv = document.getElementById('transactionHistory');
+            transactionHistoryDiv.innerHTML = '';
+
+            if (transactionHistory.length === 0) {
+                transactionHistoryDiv.innerHTML = '<p>No transaction history available.</p>';
+                return;
+            }
+
+            const ul = document.createElement('ul');
+            transactionHistory.forEach(transaction => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}:</strong> 
+                $${transaction.amount.toFixed(2)} on ${transaction.date}`;
+                ul.appendChild(li);
+            });
+
+            transactionHistoryDiv.appendChild(ul);
+        }
+
+        // Clear transaction history
+        document.getElementById('clearHistoryBtn').addEventListener('click', function () {
+            transactionHistory = [];
+            localStorage.setItem('bank_transactionHistory', JSON.stringify(transactionHistory));
+            updateTransactionHistory();
+        });
+    </script>
+</body>
+
+</html>
